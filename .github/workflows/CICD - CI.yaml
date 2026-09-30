@@ -5,7 +5,7 @@ on:
   push:
     branches: ["master"]
 
-permission:
+permissions:
   contents: read
 
 env:
@@ -19,24 +19,26 @@ jobs:
 
     steps:
       - name: Get Code
-	    uses: actions/checkout@v7
+        uses: actions/checkout@v7
 
-	  - name: Setup .NET
+      - name: Setup .NET
         uses: actions/setup-dotnet@v5
-	    with:
-	      dotnet-version: ${{ env.DOTNET_VERSION }}
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-	  - name: Restore
+      - name: Restore
         run: dotnet restore ${{ env.SOLUTION_PATH }}
 
-	  - name: Build
-	    run: dotnet build ${{ env.SOLUTION_PATH }}
-	      --configuration Release
-	      --no-restore
+      - name: Build
+        run: |
+          dotnet build ${{ env.SOLUTION_PATH }} \
+            --configuration Release \
+            --no-restore
 
-	  - name: Test
-	    run: dotnet test ${{ env.SOLUTION_PATH }}
-	      --configuration Release
-	      --no-restore
-	      --no-build
-	      --verbosity normal
+      - name: Test
+        run: |
+          dotnet test ${{ env.SOLUTION_PATH }} \
+            --configuration Release \
+            --no-restore \
+            --no-build \
+            --verbosity normal
