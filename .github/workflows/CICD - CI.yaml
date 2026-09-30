@@ -6,36 +6,37 @@ on:
     branches: ["master"]
 
 permission:
-	contents: read
+  contents: read
 
 env:
-	DOTNET_VERSION: "10.0.x"
-	SOLUTION_PATH: "CICD-Template.slnx"
+  DOTNET_VERSION: "10.0.x"
+  SOLUTION_PATH: "CICD-Template.slnx"
 
 jobs:
-	name: Build-and-Test
-	runs-on: ubuntu-latest
+  Build-and-Test:
+    name: Build And Test
+    runs-on: ubuntu-latest
 
-	steps:
-	- name: Get Code
+    steps:
+    - name: Get Code
 	  uses: actions/checkout@v7
 
 	- name: Setup .NET
-	  uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v5
 	  with:
 	    dotnet-version: ${{ env.DOTNET_VERSION }}
 
 	- name: Restore
-	  run: dotnet restore ${{ env.SOLUTION_PATH }}
+      run: dotnet restore ${{ env.SOLUTION_PATH }}
 
 	- name: Build
 	  run: dotnet build ${{ env.SOLUTION_PATH }}
 	    --configuration Release
-		--no-restore
+	    --no-restore
 
 	- name: Test
 	  run: dotnet test ${{ env.SOLUTION_PATH }}
 	    --configuration Release
 	    --no-restore
-		--no-build
-		--verbosity normal
+	    --no-build
+	    --verbosity normal
